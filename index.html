@@ -1,0 +1,120 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Upcoming games</title>
+    <meta name="description" content="Raspberry Pi">
+    <meta name="author" content="Oskar Rosén">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="css/styles.css?v=1.0">-->
+
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+    
+
+    <div class="container">
+        <h1>List over upcoming games</h1>
+        <br>
+        <h2>Counter-Strike GO</h2>
+        <p>Upcoming Fnatic games</p>
+        <table id="cs-table" class="table table-condensed table-striped table-hover" style="width: 80%;">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Team1</th>
+                    <th>Team2</th>
+                    <th>Url</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container">
+        <h2>Fotball</h2>
+        <p>Upcoming Malmö FF and Real Madrid games</p>
+        <table id="fotball-table" class="table table-condensed table-striped table-hover" style="width: 80%;">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Team1</th>
+                    <th>Team2</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+
+    <!--<script src="js/scripts.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    
+    <script>
+        $.ajax({
+            type: "GET",
+            url: "http://192.168.1.13:8001/cs",
+            success: function (response) {
+                console.log("success:\n");
+                console.log(response);
+
+                createHtmlCs(response);
+            },
+            error: function (response) {
+                console.log("error:\n");
+                console.log(response);
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "http://192.168.1.13:8001/fotball",
+            success: function (response) {
+                console.log("success:\n");
+                console.log(response);
+
+                createHtmlFotball(response);
+            },
+            error: function (response) {
+                console.log("error:\n");
+                console.log(response);
+            }
+        });
+
+        function createHtmlCs(response) {
+            var tmp = null;
+            for (var a = 0; a < response.length; a++) {
+                tmp = $("<tr>").html("<td>" + response[a].date + "</td><td>" + response[a].team1 + "</td><td>" + response[a].team2 + "</td><td><a target=\"_blank\" href=\"" + response[a].url + "\">Go to website</a></td>");
+                $("#cs-table").append(tmp);
+            }
+        }
+
+        function createHtmlFotball(response) {
+            var tmp = null;
+            for (var a = 0; a < response.length; a++) {
+                tmp = $("<tr>").html("<td>" + response[a].time + " " + response[a].date + "</td><td>" + response[a].team1 + "</td><td>" + response[a].team2 + "</td>");
+                $("#fotball-table").append(tmp);
+            }
+        }
+
+        function printChannels(channels) {
+            var tmp = "";
+            for(var a = 0; a < channels.length; a++) {
+                tmp += channels[a] + "<br>"
+            }
+            return tmp;
+        }
+    </script>
+</body>
+
+</html>
