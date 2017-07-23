@@ -8,3 +8,4 @@
 - [ ] Optimize Soup
 - [ ] Automatically remove old (already happened) events
 - [ ] Automatically add to calendar
+- [ ] Fetch and present results from games
