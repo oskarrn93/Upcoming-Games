@@ -7,3 +7,4 @@
 - [ ] Exclude Fnatic Academy
 - [ ] Optimize Soup
 - [ ] Automatically remove old (already happened) events
+- [ ] Automatically add to calendar
