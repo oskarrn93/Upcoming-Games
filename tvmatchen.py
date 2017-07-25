@@ -49,7 +49,7 @@ def tvmatchen(DEBUG = False, DATABASE = False):
             if(DEBUG): print "\n"
             games.append(game)
 
-    if(DEBUG): 
+    if(DEBUG):
         if games:
             for game in games:
                 print game
@@ -59,36 +59,36 @@ def tvmatchen(DEBUG = False, DATABASE = False):
     if games and DATABASE:
         client = MongoClient('localhost', 27017)
         db = client['upcoming']
-        collection = db['fotball']
+        collection = db['football']
 
         for game in games:
             m = hashlib.md5()
             m.update("".join(str(element) for element in game))
-            post = {"type": "fotball",
+            post = {"type": "football",
                     "team1"     : game[0],
                     "team2"     : game[1],
                     "time"      : game[2],
                     "date"      : game[3],
                     "channels"  : game[4],
                     "_id"       : m.hexdigest()}
-            
-            if(DEBUG): 
+
+            if(DEBUG):
                 print "inserted into database:"
                 print post
             try:
                 collection.insert(post) #insert_one ?
             except:
                 if(DEBUG): print "already existing in db"
-                            
+
 def remove_all_database():
     client = MongoClient('localhost', 27017)
     db = client['upcoming']
-    db.fotball.remove({})
+    db.football.remove({})
 
 def show_all_database():
     client = MongoClient('localhost', 27017)
     db = client['upcoming']
-    cursor = db.fotball.find()
+    cursor = db.football.find()
     for document in cursor:
         print(document)
 
@@ -96,5 +96,3 @@ def show_all_database():
 if __name__ == "__main__":
     tvmatchen(True, True)
     #remove_all_database()
-
-

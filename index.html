@@ -18,13 +18,13 @@
 </head>
 
 <body>
-    
+
 
     <div class="container">
         <h1>List over upcoming games</h1>
         <br>
-        <h2>Counter-Strike GO</h2>
-        <p>Upcoming Fnatic games</p>
+        <h2>Counter-Strike: GO</h2>
+        <p>Upcoming games</p>
         <table id="cs-table" class="table table-condensed table-striped table-hover" style="width: 80%;">
             <thead>
                 <tr>
@@ -40,9 +40,9 @@
     </div>
 
     <div class="container">
-        <h2>Fotball</h2>
-        <p>Upcoming Malmö FF and Real Madrid games</p>
-        <table id="fotball-table" class="table table-condensed table-striped table-hover" style="width: 80%;">
+        <h2>Football</h2>
+        <p>Upcoming games</p>
+        <table id="football-table" class="table table-condensed table-striped table-hover" style="width: 80%;">
             <thead>
                 <tr>
                     <th>Date</th>
@@ -59,7 +59,7 @@
     <!--<script src="js/scripts.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    
+
     <script>
         $.ajax({
             type: "GET",
@@ -78,12 +78,12 @@
 
         $.ajax({
             type: "GET",
-            url: "http://192.168.1.13:8001/fotball",
+            url: "http://192.168.1.13:8001/football",
             success: function (response) {
                 console.log("success:\n");
                 console.log(response);
 
-                createHtmlFotball(response);
+                createHtmlFootball(response);
             },
             error: function (response) {
                 console.log("error:\n");
@@ -99,11 +99,11 @@
             }
         }
 
-        function createHtmlFotball(response) {
+        function createHtmlFootball(response) {
             var tmp = null;
             for (var a = 0; a < response.length; a++) {
                 tmp = $("<tr>").html("<td>" + response[a].time + " " + response[a].date + "</td><td>" + response[a].team1 + "</td><td>" + response[a].team2 + "</td>");
-                $("#fotball-table").append(tmp);
+                $("#football-table").append(tmp);
             }
         }
 
