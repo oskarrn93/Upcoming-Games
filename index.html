@@ -67,7 +67,6 @@
             success: function (response) {
                 console.log("success:\n");
                 console.log(response);
-
                 createHtmlCs(response);
             },
             error: function (response) {
@@ -82,7 +81,6 @@
             success: function (response) {
                 console.log("success:\n");
                 console.log(response);
-
                 createHtmlFootball(response);
             },
             error: function (response) {
@@ -93,18 +91,56 @@
 
         function createHtmlCs(response) {
             var tmp = null;
-            for (var a = 0; a < response.length; a++) {
-                tmp = $("<tr>").html("<td>" + response[a].date + "</td><td>" + response[a].team1 + "</td><td>" + response[a].team2 + "</td><td><a target=\"_blank\" href=\"" + response[a].url + "\">Go to website</a></td>");
-                $("#cs-table").append(tmp);
+            var time_now = Math.floor(Date.now()/1000);
+            var length = response.length;
+
+            if(length > 0) {
+              for (var a = 0; a < length; a++) {
+                if(time_now > response[a].date)
+                  continue; //dont print old events
+
+                  tmp = $("<tr>").html("<td>" + printDate(response[a].date) + "</td><td>" + response[a].team1 + "</td><td>" + response[a].team2 + "</td><td><a target=\"_blank\" href=\"" + response[a].url + "\">Go to website</a></td>");
+                  $("#cs-table").append(tmp);
+                  console.log("cs: " + response[a].date)
+              }
             }
+            else {
+              $("#cs-table").append("<b>No data</b>");
+            }
+
         }
 
         function createHtmlFootball(response) {
             var tmp = null;
-            for (var a = 0; a < response.length; a++) {
-                tmp = $("<tr>").html("<td>" + response[a].time + " " + response[a].date + "</td><td>" + response[a].team1 + "</td><td>" + response[a].team2 + "</td>");
+            var time_now = Math.floor(Date.now()/1000);
+            var length = response.length;
+
+            if(length > 0) {
+              for (var a = 0; a < length; a++) {
+                if(time_now > response[a].date)
+                  continue; //dont print old events
+
+                tmp = $("<tr>").html("<td>" + printDate(response[a].date) + "</td><td>" + response[a].team1 + "</td><td>" + response[a].team2 + "</td>");
                 $("#football-table").append(tmp);
+              }
             }
+            else {
+              $("#football-table").append("<b>No data</b>");
+            }
+        }
+
+        function printDate(timestamp) {
+          //return new Date(timestamp*1000)
+          var a = new Date(timestamp * 1000);
+          var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          var year = a.getFullYear();
+          var month = months[a.getMonth()];
+          var date = a.getDate();
+          var hour = a.getHours() < 10 ? '0' + a.getHours() : a.getHours();//a.getHours();
+          var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();//a.getMinutes();
+          var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); //a.getSeconds();
+          var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+          return time;
         }
 
         function printChannels(channels) {

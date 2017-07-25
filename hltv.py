@@ -48,16 +48,17 @@ def hltv(DEBUG = False, DATABASE = False):
                     game.append(tmp_other_team.text)
 
             timestamp = upcoming_game.parent.parent.parent.find("div", {"class" : "time"})["data-unix"]
-            game.append(datetime.datetime.fromtimestamp(int(timestamp)/1000).strftime('%Y-%m-%d %H:%M:%S'))
+            #game.append(datetime.datetime.fromtimestamp(int(timestamp)/1000).strftime('%Y-%m-%d %H:%M:%S'))
+            game.append(timestamp)
             game.append("https://www.hltv.org" + upcoming_game.parent.parent.parent.parent.parent.parent["href"])
 
             games.append(game)
-    
-    if(DEBUG): 
+
+    if(DEBUG):
         if games:
             for game in games:
                 print  game[2] + ": " + game[0] + " - " + game[1] + "\n" + game[3] + "\n"
-  
+
     if games and DATABASE:
         client = MongoClient('localhost', 27017)
         db = client['upcoming']
@@ -72,11 +73,11 @@ def hltv(DEBUG = False, DATABASE = False):
                     "date"  : game[2],
                     "url"   : game[3],
                     "_id"   : m.hexdigest()}
-            if(DEBUG): 
+            if(DEBUG):
                 print "inserted into database:"
                 print post
             try:
-                collection.insert(post) #insert_one ?
+                collection.insert_one(post) #insert_one ?
             except:
                 if(DEBUG): print "already existing in db"
     else:
@@ -95,5 +96,5 @@ def show_all_database():
         print(document)
 
 if __name__ == "__main__":
-   hltv(True, True)
+   hltv(True, False)
    #remove_all_database()
