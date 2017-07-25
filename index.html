@@ -48,6 +48,7 @@
                     <th>Date</th>
                     <th>Team1</th>
                     <th>Team2</th>
+                    <th>Channels</th>
                 </tr>
             </thead>
             <tbody>
@@ -120,7 +121,7 @@
                 if(time_now > response[a].date)
                   continue; //dont print old events
 
-                tmp = $("<tr>").html("<td>" + printDate(response[a].date) + "</td><td>" + response[a].team1 + "</td><td>" + response[a].team2 + "</td>");
+                tmp = $("<tr>").html("<td>" + printDate(response[a].date) + "</td><td>" + response[a].team1 + "</td><td>" + response[a].team2 + "</td><td>" + printChannels(response[a].channels) + "</td>");
                 $("#football-table").append(tmp);
               }
             }
