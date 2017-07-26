@@ -9,12 +9,9 @@
     <meta name="description" content="Raspberry Pi">
     <meta name="author" content="Oskar Rosén">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!--<link rel="stylesheet" href="css/styles.css?v=1.0">-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
 
-    <!--[if lt IE 9]>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
-  <![endif]-->
 </head>
 
 <body>
@@ -56,18 +53,19 @@
         </table>
     </div>
 
-
-    <!--<script src="js/scripts.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
 
     <script>
+        var server_address = "http://oskarrn93.synology.me:8001";
+
         $.ajax({
             type: "GET",
-            url: "http://192.168.1.13:8001/cs",
+            url: server_address + "/cs",
             success: function (response) {
-                console.log("success:\n");
-                console.log(response);
+                //console.log("success:\n");
+                //console.log(response);
                 createHtmlCs(response);
             },
             error: function (response) {
@@ -78,10 +76,10 @@
 
         $.ajax({
             type: "GET",
-            url: "http://192.168.1.13:8001/football",
+            url: server_address + "/football",
             success: function (response) {
-                console.log("success:\n");
-                console.log(response);
+                //console.log("success:\n");
+                //console.log(response);
                 createHtmlFootball(response);
             },
             error: function (response) {
@@ -92,61 +90,61 @@
 
         function createHtmlCs(response) {
             var tmp = null;
-            var time_now = Math.floor(Date.now()/1000);
+            var time_now = Math.floor(Date.now() / 1000);
             var length = response.length;
 
-            if(length > 0) {
-              for (var a = 0; a < length; a++) {
-                if(time_now > response[a].date)
-                  continue; //dont print old events
+            if (length > 0) {
+                for (var a = 0; a < length; a++) {
+                    if (time_now > response[a].date)
+                        continue; //dont print old events
 
-                  tmp = $("<tr>").html("<td>" + printDate(response[a].date) + "</td><td>" + response[a].team1 + "</td><td>" + response[a].team2 + "</td><td><a target=\"_blank\" href=\"" + response[a].url + "\">Go to website</a></td>");
-                  $("#cs-table").append(tmp);
-                  console.log("cs: " + response[a].date)
-              }
+                    tmp = $("<tr>").html("<td>" + printDate(response[a].date) + "</td><td>" + response[a].team1 +
+                        "</td><td>" + response[a].team2 + "</td><td><a target=\"_blank\" href=\"" + response[a].url +
+                        "\">Go to website</a></td>");
+                    $("#cs-table").append(tmp);
+                    console.log("cs: " + response[a].date)
+                }
+            } else {
+                $("#cs-table").append("<b>No data</b>");
             }
-            else {
-              $("#cs-table").append("<b>No data</b>");
-            }
-
         }
 
         function createHtmlFootball(response) {
             var tmp = null;
-            var time_now = Math.floor(Date.now()/1000);
+            var time_now = Math.floor(Date.now() / 1000);
             var length = response.length;
 
-            if(length > 0) {
-              for (var a = 0; a < length; a++) {
-                if(time_now > response[a].date)
-                  continue; //dont print old events
+            if (length > 0) {
+                for (var a = 0; a < length; a++) {
+                    if (time_now > response[a].date)
+                        continue; //dont print old events
 
-                tmp = $("<tr>").html("<td>" + printDate(response[a].date) + "</td><td>" + response[a].team1 + "</td><td>" + response[a].team2 + "</td><td>" + printChannels(response[a].channels) + "</td>");
-                $("#football-table").append(tmp);
-              }
-            }
-            else {
-              $("#football-table").append("<b>No data</b>");
+                    tmp = $("<tr>").html("<td>" + printDate(response[a].date) + "</td><td>" + response[a].team1 +
+                        "</td><td>" + response[a].team2 + "</td><td>" + printChannels(response[a].channels) +
+                        "</td>");
+                    $("#football-table").append(tmp);
+                }
+            } else {
+                $("#football-table").append("<b>No data</b>");
             }
         }
 
         function printDate(timestamp) {
-          //return new Date(timestamp*1000)
-          var a = new Date(timestamp * 1000);
-          var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-          var year = a.getFullYear();
-          var month = months[a.getMonth()];
-          var date = a.getDate();
-          var hour = a.getHours() < 10 ? '0' + a.getHours() : a.getHours();//a.getHours();
-          var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();//a.getMinutes();
-          var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); //a.getSeconds();
-          var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
-          return time;
+            var a = new Date(timestamp * 1000);
+            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var year = a.getFullYear();
+            var month = months[a.getMonth()];
+            var date = a.getDate();
+            var hour = a.getHours() < 10 ? '0' + a.getHours() : a.getHours(); //a.getHours();
+            var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes(); //a.getMinutes();
+            var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); //a.getSeconds();
+            var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
+            return time;
         }
 
         function printChannels(channels) {
             var tmp = "";
-            for(var a = 0; a < channels.length; a++) {
+            for (var a = 0; a < channels.length; a++) {
                 tmp += channels[a] + "<br>"
             }
             return tmp;
